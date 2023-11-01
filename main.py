@@ -1,7 +1,6 @@
 import mysql.connector as sql
 import pymongo as mongo
-
-from ItemsListGrabber import ItemsListGrabber 
+from ItemsListGrabber import ItemsListGrabber
 from GrabbedItemLists import GrabbedItemLists
 
 avitoSsdUrl = "https://www.avito.ru/sankt-peterburg/tovary_dlya_kompyutera/komplektuyuschie/zhestkie_diski-ASgBAgICAkTGB~pm7gmwZw?cd=1&d=1&f=ASgBAgECAkTGB~pm7gmwZwFFxpoME3siZnJvbSI6MCwidG8iOjYwMH0&q=ssd&s=104&user=1"
@@ -13,8 +12,7 @@ class ItemsExtractor:
     def extract(grabbed : GrabbedItemLists):
         pass
 
-ssdGrabHistory.
-
+print(ssdGrabHistory)
 
 # grab = ssdGrabber.create_grab()
 # grab.save()

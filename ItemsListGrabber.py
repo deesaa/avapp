@@ -1,12 +1,7 @@
+from SaveProvider import SaveProvider
 from GrabbedItemLists import GrabbedItemLists
-from main import SaveProvider, avitoSsdUrl
-
-
 import requests
-
-
 import datetime
-
 
 class ItemsListGrabber:
     def __init__(self, name, url):
@@ -16,10 +11,10 @@ class ItemsListGrabber:
     def create_grab(self):
         currentTime = datetime.datetime.utcnow().isoformat(sep=" ", timespec="seconds")
         headers = {'Content-Type': 'text/html',}
-        response = requests.get(avitoSsdUrl, headers=headers)
+        response = requests.get(self.url, headers=headers)
         raw_html = response.text
-        return GrabbedItemLists(self.name, currentTime, raw_html)
+        return GrabbedItemLists(self.name, currentTime, raw_html, SaveProvider)
 
     def restore(self):
         loaded = SaveProvider.loadAll(self.name)
-        return [GrabbedItemLists(self.name, l[0], l[1]) for l in loaded]
+        return [GrabbedItemLists(self.name, l[0], l[1], SaveProvider) for l in loaded]

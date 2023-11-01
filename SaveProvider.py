@@ -1,7 +1,6 @@
 import datetime
 import os
 
-
 class SaveProvider:
     def save(object):
         path = f"data/{object.origin_name}/{object.date}.html"
