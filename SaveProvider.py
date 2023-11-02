@@ -1,14 +1,38 @@
 import datetime
 import os
 
-class SaveProvider:
-    def save(object):
-        path = f"data/{object.origin_name}/{object.date}.html"
+from GrabbedItemLists import GrabbedItemLists
+from ItemRaw import ItemRaw
+
+class ItemsPageRawSaver:
+    def save(object : GrabbedItemLists):
+        path = f"data/{object.origin_name}/{object.date}/raw_page.html"
         dir_name = os.path.dirname(path)
         os.makedirs(dir_name, exist_ok=True)
         with open(path, "w") as save_file:
             save_file.write(object.raw_html)
+        pass
+    
+class ItemRawSaver:
+    def save(object : ItemRaw):
+        
+        bad_chars = [';', ':', '!', "*", "\\", '/', "@", "#"]
+        item_file_name = ''.join((filter(lambda i: i not in bad_chars, object.item_head.title)))
+        path = f"data/{object.item_head.grab_group.origin_name}/{object.item_head.grab_group.date}/items_raw/{item_file_name}.html"
+        dir_name = os.path.dirname(path)
+        os.makedirs(dir_name, exist_ok=True)
+        with open(path, "w") as save_file:
+            save_file.write(object.raw_html)
+        pass
 
+class SaveProvider:
+    
+    savers = {GrabbedItemLists : ItemsPageRawSaver, 
+              ItemRaw : ItemRawSaver}
+    
+    def save(object):
+        SaveProvider.savers[type(object)].save(object)
+        
     def loadAll(origin_name):
         if not os.path.isdir(f"data/{origin_name}"):
             print(f"NO SAVE DATA FOR {origin_name}")
