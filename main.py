@@ -1,33 +1,14 @@
 import mysql.connector as sql
 import requests
 import pymongo as mongo
-from GrabbersPool import GrabbersPool
-from ItemsExtractor import ItemsExtractor
-from lxml import etree
+from Executor import Executor
+from ItemsListGrabber import DeniedIpException
 
-GrabConfig = {
-    "SSD_cheap_600rub_allregions" : {
-        "enable" : True,
-        "url" : "https://www.avito.ru/all/tovary_dlya_kompyutera/komplektuyuschie/zhestkie_diski-ASgBAgICAkTGB~pm7gmwZw?cd=1&d=1&f=ASgBAgECAkTGB~pm7gmwZwFFxpoME3siZnJvbSI6MCwidG8iOjYwMH0&q=ssd&s=104",
-        "title_exclude":{
-            "Переходник", "Салазки", "Винт", "Болты", "Адаптер", "Корпус", "Комплект", "Крепления", "Шлейф"
-        }
-    }
-}
-
-grabbers_pool = GrabbersPool(GrabConfig)
-grabber = grabbers_pool.get_grabber("SSD_cheap_600rub_allregions")
-itemExtractor = ItemsExtractor()
-grab = grabber.create_grab()
-grab.save()
-item_heads = itemExtractor.extract(grab)
-item_heads_included = [x for x in item_heads if not grabber.is_exclude_item_head(x)]
-items_raw = [grabber.create_item_from_head(x) for x in item_heads_included[:2]]
-[x.save() for x in items_raw[:2]]
-
-items = [itemExtractor.extract_raw_item(x) for x in items_raw]
-itemExtractor.extract(items[0])
-
+try:
+    Executor.DoGrab()
+except DeniedIpException as e:
+    print("DENIED IP: " + e.log_text)
+    
 
 #print('\n'.join([str(x.price) for x in itemHeads2]))
 

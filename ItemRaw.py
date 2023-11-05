@@ -11,3 +11,6 @@ class ItemRaw:
     def save(self):
         self.save_provider.save(self)
         
+        
+    non_save_attr = {"save_provider"}
+        
